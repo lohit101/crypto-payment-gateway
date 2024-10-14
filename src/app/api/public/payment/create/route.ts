@@ -4,12 +4,10 @@ import { auth } from '@clerk/nextjs/server';
 
 export async function POST(req: Request) {
     const { userId }: { userId: string | null } = auth()
-    const { amount } = await req.json();
+    const { amount, paymentUrl } = await req.json();
     const supabaseUrl = 'https://ogmkxjkzdojjwwseivju.supabase.co'
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nbWt4amt6ZG9qand3c2Vpdmp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjcyNTg1MDcsImV4cCI6MjA0MjgzNDUwN30.fYI0rYpE0gQhjDfnyuwsvGzgZigxlI2Y6SUZ9dOxv4Y'
     const supabase = createClient(supabaseUrl, supabaseKey)
-
-    console.log(userId);
 
     // Calculate expiration date
     const expirationDate = new Date();
@@ -23,7 +21,7 @@ export async function POST(req: Request) {
         const { data, error } = await supabase
             .from('PaymentLink')
             .insert([
-                { id: paymentId, amount: parseFloat(amount), paymentUrl: `https://${host}/payment/pay/${paymentId}`, expiresAt: expirationDate, status: 'pending', payTo: String(userId) },
+                { id: paymentId, amount: parseFloat(amount), paymentUrl: `${paymentUrl}/payment/pay?id=${paymentId}`, expiresAt: expirationDate, status: 'pending', payTo: String(userId) },
             ])
             .select()
 

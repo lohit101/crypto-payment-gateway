@@ -1,15 +1,12 @@
-// src/app/create_link/page.tsx
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/router";
 import React from "react";
 
 export default function CreatePaymentLink() {
     const [amount, setAmount] = useState<string>("");
     const [paymentLink, setPaymentLink] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    // const router = useRouter();
 
     const createPaymentLink = async () => {
         setError(null);

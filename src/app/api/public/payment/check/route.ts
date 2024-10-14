@@ -12,7 +12,6 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'ID is required' }, { status: 400 });
     }
 
-
     let { data: PaymentLink, error } = await supabase
         .from('PaymentLink')  // or 'payment_link' based on your table name
         .select('*')          // Select all columns

@@ -1,12 +1,10 @@
-import { auth } from '@clerk/nextjs/server';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
-    const { amount, token } = await request.json();
-    const { userId }: { userId: string | null } = auth();
+    const { token } = await request.json();
 
     // Check for missing amount
-    if (!amount || !token) {
+    if (!token) {
         return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
     }
 
@@ -19,18 +17,19 @@ export async function POST(request: NextRequest) {
         }
 
         const data = await response.json();
-        const price = data[String(token)];
 
         // Return the calculated amount
-        return NextResponse.json(
-            {
-                amount: String(parseFloat(price) * parseFloat(amount)),
-                userId: userId,
-                callbackUrl: "",
-                token: token,
-            },
-            { status: 200 }
-        );
+        // return NextResponse.json(
+        //     {
+        //         amount: String(parseFloat(price) * parseFloat(amount)),
+        //         userId: userId,
+        //         callbackUrl: "",
+        //         token: token,
+        //     },
+        //     { status: 200 }
+        // );
+
+        return NextResponse.json(data);
 
     } catch (error) {
         console.error("Error fetching price or processing request:", error);
